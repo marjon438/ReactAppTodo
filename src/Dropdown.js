@@ -1,12 +1,29 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "./App";
 
 export function Dropdown() {
-  const [openDropdownState, setOpenDropdownState] = React.useState(false);
+  const [openDropdownState, setOpenDropdownState] = useState(false);
   const { filterState, setfilterState } = useContext(AppContext);
 
   function handleOpen() {
     setOpenDropdownState(!openDropdownState);
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function FilterButton({ filterName }) {
+    return (
+      <button
+        onClick={() => {
+          setfilterState(filterName);
+          handleOpen();
+        }}
+      >
+        {capitalizeFirstLetter(filterName)}
+      </button>
+    );
   }
 
   return (
@@ -14,38 +31,19 @@ export function Dropdown() {
       {openDropdownState ? (
         <div>
           <div>
-            <button
-              onClick={() => {
-                setfilterState("all");
-                handleOpen();
-              }}
-            >
-              All
-            </button>
+            <FilterButton filterName={"all"} />
           </div>
           <div>
-            <button
-              onClick={() => {
-                setfilterState("done");
-                handleOpen();
-              }}
-            >
-              Done
-            </button>
+            <FilterButton filterName={"done"} />
           </div>
           <div>
-            <button
-              onClick={() => {
-                setfilterState("undone");
-                handleOpen();
-              }}
-            >
-              Undone
-            </button>
+            <FilterButton filterName={"undone"} />
           </div>
         </div>
       ) : (
-        <button onClick={handleOpen}>Filter ({filterState})</button>
+        <button onClick={handleOpen}>
+          Filter ({capitalizeFirstLetter(filterState)})
+        </button>
       )}
     </div>
   );
